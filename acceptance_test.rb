@@ -36,7 +36,7 @@ class AcceptanceTest < Minitest::Test
     end
   end
 
-  meta hi: true
+  #meta hi: true
   def test_it_handles_multiple_requests
     app = Proc.new { |env_hash| [200, {'Content-Type' => 'text/plain'}, []] }
 
@@ -48,7 +48,7 @@ class AcceptanceTest < Minitest::Test
   end
 
 
-  meta hello: true
+ # meta hello: true
   def test_it_starts_on_the_specified_port
     other_port = 9293
     app = Proc.new do |env_hash|
@@ -59,8 +59,8 @@ class AcceptanceTest < Minitest::Test
     end
 
     assert_equal 'hello', Net::HTTP.get_response('localhost', '/', other_port).body
-    # run_server other_port, app do
-    #   assert_equal 'hello', Net::HTTP.get_response('localhost', '/', other_port).body
-    # end
+     run_server other_port, app do
+       assert_equal 'hello', Net::HTTP.get_response('localhost', '/', other_port).body
+     end
   end
 end
