@@ -1,4 +1,4 @@
-require_relative 'notes/web' # <-- you'll need to make this
+require './notes/web' # <-- you'll need to make this
 require 'net/http'  # this is from the stdlib
 
 class AcceptanceTest < Minitest::Test
@@ -41,7 +41,7 @@ class AcceptanceTest < Minitest::Test
     app = Proc.new { |env_hash| [200, {'Content-Type' => 'text/plain'}, []] }
 
     run_server port, app do
-      sleep (1)
+#      sleep (1)
       assert_equal "200", Net::HTTP.get_response('localhost', '/', port).code
       assert_equal "200", Net::HTTP.get_response('localhost', '/', port).code
     end
