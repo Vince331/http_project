@@ -47,7 +47,7 @@ class AcceptanceTest < Minitest::Test
 
 
   def test_it_starts_on_the_specified_port
-skip
+
     other_port = 9293
     app = Proc.new do |env_hash|
       [ 200,
