@@ -35,7 +35,7 @@ class AcceptanceTest < Minitest::Test
   end
 
   def test_it_handles_multiple_requests
-skip
+
     app = Proc.new { |env_hash| [200, {'Content-Type' => 'text/plain'}, []] }
 
 
