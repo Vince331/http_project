@@ -17,7 +17,7 @@ class AcceptanceTest < Minitest::Test
   end
 
   def test_1it_accepts_and_responds_to_a_web_request
-skip
+
     path_info = "this value should be overridden by the app!"
 
     app = Proc.new do |env_hash|
