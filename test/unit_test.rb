@@ -33,5 +33,30 @@ class AcceptanceTest < Minitest::Test
       assert_equal "hello, class ^_^", response.body
     end
   end
+
+  def test_it_repsonds_to_x
+
+    my_path = "/foo"
+
+    app = Proc.new do |env_hash|
+     path_info = env_hash['PATH_INFO']
+      body      = "hello"
+      [200, {'Content-Type' => 'text/plain', 'Content-Length' => body.length, 'omg' => 'bbq'}, [body]]
+    end
+
+    run_server port, app do
+      response = Net::HTTP.get_response('localhost', my_path, port)
+      assert_equal "200",              response.code
+      assert_equal my_path,              response.body
+      assert_equal "hello", response.body
+    end
+
+
+
+
+
+
+  end
+
 end
 

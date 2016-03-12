@@ -11,10 +11,10 @@ class AcceptanceTest < Minitest::Test
     thread = Thread.new { server.start } # The thread allows the server to sit and wait for a request, but still return to here so we can send it.
     thread.abort_on_exception = true
     block.call
-  ensure
-    thread.kill if thread
-    server.stop if server
-  end
+  # ensure
+  #   thread.kill if thread
+  #   server.stop if server
+ end
 
   def test_it_accepts_and_responds_to_a_web_request
 
