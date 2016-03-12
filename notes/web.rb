@@ -25,14 +25,14 @@ class Notes
         final << socket.gets
       end
 
-      require "pry"
-      binding.pry
+     # require "pry"
+     # binding.pry
 
-      parser(final)
+      check = parser(final)
 
 
 
-     #response_code, headers, body = @app.call(inline)
+      response_code, headers, body = @app.call(check)
       header = "HTTP/1.1 "+response_code.to_s+" OK\r\n" +
       headers.map{ |k,v| "#{k}: #{v}"}.join("\r\n")
       socket.print header
@@ -46,9 +46,16 @@ class Notes
 
       def parser(final)
 
+      first_line = final.shift
+      first_line = first_line.split(" ")
+      check = {"REQUEST_METHOD" => first_line[0],
+      "PATH_INFO" => first_line[1],
+      "SERVER_PROTOCOL"=> first_line[2]}
 
-#        .map{ |k,v| "#{k}: #{v}"}.join("\r\n")
-
+     # require "pry"
+     # binding.pry
+#   .map{ |k,v| "#{k}: #{v}"}.join("\r\n")
+      check
       end
 
 
