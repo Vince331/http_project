@@ -8,15 +8,27 @@ class AcceptanceTest < Minitest::Test
 
   def run_server(port, app, &block)
     server = Notes::Web.new(app, Port: port, Host: 'localhost')
-    thread = Thread.new { server.start } # The thread allows the server to sit\
-    #and wait for a request, but still return to here so we can send it.
-    thread.abort_on_exception = true
+    # The thread allows the server to sit and wait for a request, but still return to here so we can send it.
+    thread = Thread.new do
+      Thread.current.abort_on_exception = true
+      server.start
+    end
+    wait_for thread
     block.call
   ensure
     thread.kill if thread
     server.stop if server
   end
-meta first: true
+
+  def wait_for(thread)
+    loop do
+      break if thread.status == 'sleep' # it is ready for our request
+      raise "The iserver finished without waiting for our request" unless thread.status
+      Thread.pass
+    end
+  end
+
+
   def test_it_accepts_and_responds_to_a_web_request
     path_info = "this value should be overridden by the app!"
 
@@ -27,14 +39,15 @@ meta first: true
     end
 
     run_server port, app do
-      response = Net::HTTP.get_response('localhost', '/path', port)
+      response = Net::HTTP.get_response('localhost', '/lolol', port)
       assert_equal "200",              response.code
       assert_equal 'bbq',              response.header['omg']
       assert_equal "hello, class ^_^", response.body
+      assert_equal "/lolol",           path_info
     end
   end
 
-meta second:true
+
   def test_it_handles_multiple_requests
     app = Proc.new { |env_hash| [200, {'Content-Type' => 'text/plain'}, []] }
 
@@ -44,7 +57,7 @@ meta second:true
     end
   end
 
-meta third:true
+
   def test_it_starts_on_the_specified_port
     other_port = 9293
     app = Proc.new do |env_hash|
