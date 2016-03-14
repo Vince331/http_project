@@ -119,5 +119,5 @@ end
 # server = Notes::Web.new(app, Port: port, Host: 'localhost')
 #    thread = Thread.new { server.start } # The thread allows the server to sit and wait for a request, but still return to here so we can send it.
 #    thread.abort_on_exception = true
-server = Notes::Web.new(Port: 6969, Host: 'localhost')
-server.own_app
+#server = Notes::Web.new(Port: 6969, Host: 'localhost')
+#server.own_app
