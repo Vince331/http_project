@@ -16,13 +16,8 @@ class Notes
     def start
       loop do
         socket = @server.accept
-        final = []
-        final << socket.gets
-        while final[-1] != "\r\n"
-          final << socket.gets
-        end
-        check = parser(final)
-        response_code, headers, body = @app.call(check)
+        env = parser(socket)
+        response_code, headers, body = @app.call(env)
         header = "HTTP/1.1 "+response_code.to_s+" OK\r\n" +
           headers.map{ |k,v| "#{k}: #{v}"}.join("\r\n")
         socket.print header
@@ -32,7 +27,13 @@ class Notes
       end
     end
 
-    def parser(final)
+    def parser(socket)
+
+      final = []
+      final << socket.gets
+      while final[-1] != "\r\n"
+        final << socket.gets
+      end
       first_line = final.shift
       first_line = first_line.split(" ")
       check = {"REQUEST_METHOD" => first_line[0],
@@ -51,12 +52,7 @@ class Notes
     def own_app
       loop do
         socket = @server.accept
-        final = []
-        final << socket.gets
-        while final[-1] != "\r\n"
-          final << socket.gets
-        end
-        check = parser(final)
+        env = parser(socket)
         socket.print "HTTP/1.1 200 OK\r\n"
         socket.print "Content-Type: text/html\r\n"
         socket.print "Content-Length: 125\r\n"
@@ -69,9 +65,11 @@ class Notes
         socket.close
       end
     end
+
   end
   #end Web
 end
 #end Notes
+
 #server = Notes::Web.new(Port: 6969, Host: 'localhost')
 #server.own_app
