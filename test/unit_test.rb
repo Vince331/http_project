@@ -35,9 +35,7 @@ class AcceptanceTest < Minitest::Test
   end
 
   def test_it_repsonds_to_x
-
     my_path = "/foo"
-
     app = Proc.new do |env_hash|
      path_info = env_hash['PATH_INFO']
       body      = "hello"
@@ -50,13 +48,6 @@ class AcceptanceTest < Minitest::Test
      # assert_equal my_path,              response.body
       assert_equal "hello", response.body
     end
-
-
-
-
-
-
   end
 
 end
-
