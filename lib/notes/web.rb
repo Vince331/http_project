@@ -40,7 +40,6 @@ class Notes
                "SERVER_PROTOCOL"=> first_line[2],
                "HTTP_VERSION"=> first_line[2]}
       query = []
-      #second_line = final[1].split(":",3)
       if first_line[1].include?("?")
         query  = check["PATH_INFO"][/=.*/][1..-1].split("+")
         check["QUERY_STRING"] = query
@@ -76,7 +75,6 @@ class Notes
                "SERVER_PROTOCOL"=> first_line[2],
                "HTTP_VERSION"=> first_line[2]}
       query = []
-      #second_line = final[1].split(":",3)
       if first_line[1].include?("?")
         query  = check["PATH_INFO"][/=.*/][1..-1].split("+")
         check["QUERY_STRING"] = query
