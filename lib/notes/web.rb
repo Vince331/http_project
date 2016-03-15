@@ -28,7 +28,6 @@ class Notes
     end
 
     def parser(socket)
-
       final = []
       final << socket.gets
       while final[-1] != "\r\n"
@@ -46,7 +45,23 @@ class Notes
       else
         check["QUERY_STRING"] = ""
       end
-      check
+
+      array = final.map do |x|
+        x.chomp.split(": ",2)
+      end
+
+      i = 0
+      env = {}
+      while i < array.length
+        if array[i][0] == nil
+        else
+          env[(array[i][0]).upcase] = array[i][1]
+        end
+        i+=1
+      end
+     env = check.merge(env)
+     require "pry"
+     binding.pry
     end
 
     def own_app
@@ -71,5 +86,5 @@ class Notes
 end
 #end Notes
 
-#server = Notes::Web.new(Port: 6969, Host: 'localhost')
-#server.own_app
+server = Notes::Web.new(Port: 6969, Host: 'localhost')
+server.own_app

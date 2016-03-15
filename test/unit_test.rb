@@ -28,6 +28,9 @@ socket = StringIO.new "GET / HTTP/1.1\r\n" +
                       "Cookie: gsScrollPos=\r\n" +
                       "\r\n"
 
+  def test_1
+
+  end
   # def test_1it_accepts_and_responds_to_a_web_request
 
   #   path_info = "this value should be overridden by the app!"
