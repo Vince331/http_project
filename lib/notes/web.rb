@@ -27,7 +27,17 @@ class Notes
       end
     end
 
-    def parser(socket)
+
+
+   # def self.parse(socket)
+
+   #   require "pry"
+   #   binding.pry
+   #   parser(socket)
+   # end
+
+
+    def self.parser(socket)
       final = []
       final << socket.gets
       while final[-1] != "\r\n"
@@ -55,14 +65,27 @@ class Notes
       while i < array.length
         if array[i][0] == nil
         else
-          env[(array[i][0]).upcase] = array[i][1]
+         array[i][0]  = "HTTP_#{array[i][0]}" unless array[i][0]  == 'CONTENT_TYPE' || array[i][0] == 'CONTENT_LENGTH'
+          env[(array[i][0]).upcase.tr("-", "_")] = array[i][1]
         end
         i+=1
       end
      env = check.merge(env)
-     require "pry"
-     binding.pry
+#     require "pry"
+ #    binding.pry
     end
+
+
+
+    def self.parse(socket)
+
+      require "pry"
+      binding.pry
+      parser(socket)
+    end
+
+
+
 
     def own_app
       loop do
@@ -86,5 +109,5 @@ class Notes
 end
 #end Notes
 
-server = Notes::Web.new(Port: 6969, Host: 'localhost')
-server.own_app
+#server = Notes::Web.new(Port: 6969, Host: 'localhost')
+#server.own_app
