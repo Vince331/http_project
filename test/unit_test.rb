@@ -1,6 +1,5 @@
 require 'notes/web' # <-- you'll need to make this
 require 'net/http'  # this is from the stdlib
-<<<<<<< HEAD
 
 class AcceptanceTest < Minitest::Test
   def port
@@ -52,16 +51,17 @@ skip
       assert_equal "hello", response.body
     end
 
-
-
-
-
-
   end
-=======
-require 'stringio'
+end
 
-class ParsingTest < Minitest::Test
+
+
+
+
+
+# require 'stringio'
+
+# class ParsingTest < Minitest::Test
 #  def port
 #    9292
 #  end
@@ -75,17 +75,20 @@ class ParsingTest < Minitest::Test
 #    thread.kill if thread
 #    server.stop if server
 #  end
+#    server.stop if server
+#  end
 
-socket = StringIO.new "GET / HTTP/1.1\r\n" +
-                      "Host: localhost:3000\r\n" +
-                      "Connection: keep-alive\r\n" +
-                      "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\r\n" +
-                      "Upgrade-Insecure-Requests: 1\r\n" +
-                      "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36\r\n" +
-                      "Accept-Encoding: gzip, deflate, sdch\r\n" +
-                      "Accept-Language: en-US,en;q=0.8\r\n" +
-                      "Cookie: gsScrollPos=\r\n" +
-                      "\r\n"
+# end
+# socket = StringIO.new "GET / HTTP/1.1\r\n" +
+#                       "Host: localhost:3000\r\n" +
+#                       "Connection: keep-alive\r\n" +
+#                       "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\r\n" +
+#                       "Upgrade-Insecure-Requests: 1\r\n" +
+#                       "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36\r\n" +
+#                       "Accept-Encoding: gzip, deflate, sdch\r\n" +
+#                       "Accept-Language: en-US,en;q=0.8\r\n" +
+#                       "Cookie: gsScrollPos=\r\n" +
+#                       "\r\n"
 
   # def test_1it_accepts_and_responds_to_a_web_request
 
@@ -120,6 +123,4 @@ socket = StringIO.new "GET / HTTP/1.1\r\n" +
   #     assert_equal "hello", response.body
   #   end
   # end
->>>>>>> e217d11ad819ab45d641e400324a76700fd77a5e
 
-end

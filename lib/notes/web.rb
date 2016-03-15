@@ -7,6 +7,23 @@ class Notes
     def initialize(app = nil, hash)
       @server = TCPServer.new hash[:Host], hash[:Port]
       @app =  app
+       @form = "<form action='/search' method='GET'>
+                     <input type='text' name='query'>
+                     <input type='Submit'>
+                     </form>"
+
+        @notes = 'Add 1 to 2    1 + 2  # => 3,\r\n
+                 Subtract 5 from 2    2 - 5  # => -3,\r\n
+                 Is 1 less than 2    1 < 2  # => true,\r\n
+                 Is 1 equal to 2    1 == 2 # => 3,\r\n
+                 Is 1 greater than 2    1 > 2  # => 3,\r\n
+                 Is 1 less than or equal to 2    1 <= 2 # => 3,\r\n
+                 Is 1 greater than or equal to 2    1 >= 2 # => 3,\r\n
+                 Convert 1 to a float        1.to_f # => 3,\r\n
+                 Concatenate two arrays    [1,2] + [2, 3]   # => [1, 2, 2, 3],\r\n
+                 Remove elements in second array from first    [1,2,4] - [2, 3] # => [1,4],\r\n
+                 Access an element in an array by its index    ["a","b","c"][0] # => "a",\r\n
+                 Find out how big the array is    ["a","b"].length # => 2'
     end
 
     def stop
@@ -28,7 +45,6 @@ class Notes
     end
 
     def parser(socket)
-
       final = []
       final << socket.gets
       while final[-1] != "\r\n"
@@ -46,26 +62,55 @@ class Notes
       else
         check["QUERY_STRING"] = ""
       end
-      check
-      final.each do |line|
-        line.split(":")
-        line
+
+      array = final.map do |x|
+        x.chomp.split(": ",2)
       end
+
+      if check["QUERY_STRING"].length > 0
+        @form = @notes
+      end
+
+      i = 0
+      env = {}
+      while i < array.length
+        if array[i][0] == nil
+        else
+          env[(array[i][0]).upcase] = array[i][1]
+        end
+        i+=1
+      end
+     env = check.merge(env)
     end
 
     def own_app
       loop do
         socket = @server.accept
         env = parser(socket)
+        # form = "<form action='/search' method='GET'>
+        #              <input type='text' name='query'>
+        #              <input type='Submit'>
+        #              </form>"
+
+        # notes = ['Add 1 to 2    1 + 2  # => 3',
+        #          'Subtract 5 from 2    2 - 5  # => -3',
+        #          'Is 1 less than 2    1 < 2  # => true',
+        #          'Is 1 equal to 2    1 == 2 # => 3',
+        #          'Is 1 greater than 2    1 > 2  # => 3',
+        #          'Is 1 less than or equal to 2    1 <= 2 # => 3',
+        #          'Is 1 greater than or equal to 2    1 >= 2 # => 3',
+        #          'Convert 1 to a float        1.to_f # => 3',
+        #          'Concatenate two arrays    [1,2] + [2, 3]   # => [1, 2, 2, 3]',
+        #          'Remove elements in second array from first    [1,2,4] - [2, 3] # => [1,4]',
+        #          'Access an element in an array by its index    ["a","b","c"][0] # => "a"',
+        #          'Find out how big the array is    ["a","b"].length # => 2']
+
+
         socket.print "HTTP/1.1 200 OK\r\n"
         socket.print "Content-Type: text/html\r\n"
-        socket.print "Content-Length: 125\r\n"
+        socket.print "Content-Length: #{@form.length}\r\n"
         socket.print "\r\n"
-        socket.puts "<form action='/search' method='GET'>"
-        socket.puts "<input type='text' name='query'></input>"
-        socket.puts "<input type='Submit'></input>"
-        socket.puts "</form>"
-        socket.puts "\r\n\r\n"
+        socket.puts @form
         socket.close
       end
     end
@@ -75,5 +120,5 @@ class Notes
 end
 #end Notes
 
-#server = Notes::Web.new(Port: 6969, Host: 'localhost')
-#server.own_app
+ server = Notes::Web.new(Port: 6969, Host: 'localhost')
+ server.own_app
