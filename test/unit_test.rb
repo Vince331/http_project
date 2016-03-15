@@ -48,10 +48,10 @@ class ParsingTest < Minitest::Test
 
     env_hash = Notes::Web.parser(socket)
 
-    require "pry"
-    binding.pry
-    assert_equal 'localhost' , env_hash["SERVER_NAME"]
-    assert_equal 'GET' , env_hash["SERVER_NAME"]
+   # require "pry"
+   # binding.pry
+   # assert_equal 'localhost' , env_hash["SERVER_NAME"]
+    assert_equal 'GET' , env_hash["REQUEST_METHOD"]
     assert_equal '/' , env_hash["PATH_INFO"]
     assert_equal 'HTTP/1.1' , env_hash["HTTP_VERSION"]
 

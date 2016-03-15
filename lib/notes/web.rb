@@ -27,15 +27,41 @@ class Notes
       end
     end
 
-
-
-   # def self.parse(socket)
-
-   #   require "pry"
-   #   binding.pry
-   #   parser(socket)
-   # end
-
+    def parser(socket)
+      final = []
+      final << socket.gets
+      while final[-1] != "\r\n"
+        final << socket.gets
+      end
+      first_line = final.shift
+      first_line = first_line.split(" ")
+      check = {"REQUEST_METHOD" => first_line[0],
+               "PATH_INFO" => first_line[1],
+               "SERVER_PROTOCOL"=> first_line[2],
+               "HTTP_VERSION"=> first_line[2]}
+      query = []
+      #second_line = final[1].split(":",3)
+      if first_line[1].include?("?")
+        query  = check["PATH_INFO"][/=.*/][1..-1].split("+")
+        check["QUERY_STRING"] = query
+      else
+        check["QUERY_STRING"] = ""
+      end
+      array = final.map do |x|
+        x.chomp.split(": ",2)
+      end
+      i = 0
+      env = {}
+      while i < array.length
+        if array[i][0] == nil
+        else
+          array[i][0]  = "HTTP_#{array[i][0]}" unless array[i][0]  == 'CONTENT_TYPE' || array[i][0] == 'CONTENT_LENGTH'
+          env[(array[i][0]).upcase.tr("-", "_")] = array[i][1]
+        end
+        i+=1
+      end
+      env = check.merge(env)
+    end
 
     def self.parser(socket)
       final = []
@@ -47,8 +73,10 @@ class Notes
       first_line = first_line.split(" ")
       check = {"REQUEST_METHOD" => first_line[0],
                "PATH_INFO" => first_line[1],
-               "SERVER_PROTOCOL"=> first_line[2]}
+               "SERVER_PROTOCOL"=> first_line[2],
+               "HTTP_VERSION"=> first_line[2]}
       query = []
+      #second_line = final[1].split(":",3)
       if first_line[1].include?("?")
         query  = check["PATH_INFO"][/=.*/][1..-1].split("+")
         check["QUERY_STRING"] = query
@@ -65,27 +93,13 @@ class Notes
       while i < array.length
         if array[i][0] == nil
         else
-         array[i][0]  = "HTTP_#{array[i][0]}" unless array[i][0]  == 'CONTENT_TYPE' || array[i][0] == 'CONTENT_LENGTH'
+          array[i][0]  = "HTTP_#{array[i][0]}" unless array[i][0]  == 'CONTENT_TYPE' || array[i][0] == 'CONTENT_LENGTH'
           env[(array[i][0]).upcase.tr("-", "_")] = array[i][1]
         end
         i+=1
       end
-     env = check.merge(env)
-#     require "pry"
- #    binding.pry
+      env = check.merge(env)
     end
-
-
-
-    def self.parse(socket)
-
-      require "pry"
-      binding.pry
-      parser(socket)
-    end
-
-
-
 
     def own_app
       loop do
@@ -105,9 +119,4 @@ class Notes
     end
 
   end
-  #end Web
 end
-#end Notes
-
-#server = Notes::Web.new(Port: 6969, Host: 'localhost')
-#server.own_app
