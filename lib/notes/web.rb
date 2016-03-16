@@ -82,7 +82,6 @@ class Notes
       env = check.merge(env)
     end
 
-<<<<<<< HEAD
       if query.length > 0
        result = NOTES
        query.select do |elem|
@@ -97,7 +96,6 @@ class Notes
         @form = FORM
       end
 
-=======
     def self.parser(socket)
       final = []
       final << socket.gets
@@ -120,7 +118,6 @@ class Notes
       array = final.map do |x|
         x.chomp.split(": ",2)
       end
->>>>>>> 9fef91b3d7ce72c641ac7563c4245ce3fd0761ca
       i = 0
       env = {}
       while i < array.length
@@ -131,12 +128,9 @@ class Notes
         end
         i+=1
       end
-<<<<<<< HEAD
-=======
 
       require "pry"
       binding.pry
->>>>>>> 9fef91b3d7ce72c641ac7563c4245ce3fd0761ca
       env = check.merge(env)
     end
 
