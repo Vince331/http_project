@@ -70,13 +70,11 @@ class Notes
         x.chomp.split(": ",2)
       end
 
-      if query.length > 0
-       result = NOTES
-       query.select do |elem|
-        result = result.select do |x|
-
-          x.upcase.include? elem.upcase
-        end
+      qs = check["QUERY_STRING"]
+      print  qs
+      if qs.length > 0
+        result = NOTES.select do |x|
+          x.include? qs
         end
 
         @form  = result.join("<br>")

@@ -79,16 +79,16 @@ end
 #  end
 
 # end
-# socket = StringIO.new "GET / HTTP/1.1\r\n" +
-#                       "Host: localhost:3000\r\n" +
-#                       "Connection: keep-alive\r\n" +
-#                       "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\r\n" +
-#                       "Upgrade-Insecure-Requests: 1\r\n" +
-#                       "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36\r\n" +
-#                       "Accept-Encoding: gzip, deflate, sdch\r\n" +
-#                       "Accept-Language: en-US,en;q=0.8\r\n" +
-#                       "Cookie: gsScrollPos=\r\n" +
-#                       "\r\n"
+ socket = StringIO.new "GET / HTTP/1.1\r\n" +
+                       "Host: localhost:3000\r\n" +
+                       "Connection: keep-alive\r\n" +
+                       "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\r\n" +
+                       "Upgrade-Insecure-Requests: 1\r\n" +
+                       "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36\r\n" +
+                       "Accept-Encoding: gzip, deflate, sdch\r\n" +
+                       "Accept-Language: en-US,en;q=0.8\r\n" +
+                       "Cookie: gsScrollPos=\r\n" +
+                       "\r\n"
 
   # def test_1it_accepts_and_responds_to_a_web_request
 
