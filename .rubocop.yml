@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #save this in ".rubocop.yml" in your project root
+=======
+# Save this in ".rubocop.yml" in your project root
+>>>>>>> 9fef91b3d7ce72c641ac7563c4245ce3fd0761ca
 # https://github.com/bbatsov/rubocop/tree/master/config
 
 AllCops:

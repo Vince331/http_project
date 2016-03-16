@@ -39,7 +39,7 @@ class Notes
         env = parser(socket)
         response_code, headers, body = @app.call(env)
         header = "HTTP/1.1 "+response_code.to_s+" OK\r\n" +
-          headers.map{ |k,v| "#{k}: #{v}"}.join("\r\n")
+        headers.map{ |k,v| "#{k}: #{v}"}.join("\r\n")
         socket.print header
         socket.print "\r\n\r\n"
         socket.print body.join
@@ -57,7 +57,8 @@ class Notes
       first_line = first_line.split(" ")
       check = {"REQUEST_METHOD" => first_line[0],
                "PATH_INFO" => first_line[1],
-               "SERVER_PROTOCOL"=> first_line[2]}
+               "SERVER_PROTOCOL"=> first_line[2],
+               "HTTP_VERSION"=> first_line[2]}
       query = []
       if first_line[1].include?("?")
         query  = check["PATH_INFO"][/=.*/][1..-1].split("+")
@@ -65,11 +66,23 @@ class Notes
       else
         check["QUERY_STRING"] = ""
       end
-
       array = final.map do |x|
         x.chomp.split(": ",2)
       end
+      i = 0
+      env = {}
+      while i < array.length
+        if array[i][0] == nil
+        else
+          array[i][0]  = "HTTP_#{array[i][0]}" unless array[i][0]  == 'CONTENT_TYPE' || array[i][0] == 'CONTENT_LENGTH'
+          env[(array[i][0]).upcase.tr("-", "_")] = array[i][1]
+        end
+        i+=1
+      end
+      env = check.merge(env)
+    end
 
+<<<<<<< HEAD
       if query.length > 0
        result = NOTES
        query.select do |elem|
@@ -84,15 +97,46 @@ class Notes
         @form = FORM
       end
 
+=======
+    def self.parser(socket)
+      final = []
+      final << socket.gets
+      while final[-1] != "\r\n"
+        final << socket.gets
+      end
+      first_line = final.shift
+      first_line = first_line.split(" ")
+      check = {"REQUEST_METHOD" => first_line[0],
+               "PATH_INFO" => first_line[1],
+               "SERVER_PROTOCOL"=> first_line[2],
+               "HTTP_VERSION"=> first_line[2]}
+      query = []
+      if first_line[1].include?("?")
+        query  = check["PATH_INFO"][/=.*/][1..-1].split("+")
+        check["QUERY_STRING"] = query
+      else
+        check["QUERY_STRING"] = ""
+      end
+      array = final.map do |x|
+        x.chomp.split(": ",2)
+      end
+>>>>>>> 9fef91b3d7ce72c641ac7563c4245ce3fd0761ca
       i = 0
       env = {}
       while i < array.length
         if array[i][0] == nil
         else
-          env[(array[i][0]).upcase] = array[i][1]
+          array[i][0]  = "HTTP_#{array[i][0]}" unless array[i][0]  == 'CONTENT_TYPE' || array[i][0] == 'CONTENT_LENGTH'
+          env[(array[i][0]).upcase.tr("-", "_")] = array[i][1]
         end
         i+=1
       end
+<<<<<<< HEAD
+=======
+
+      require "pry"
+      binding.pry
+>>>>>>> 9fef91b3d7ce72c641ac7563c4245ce3fd0761ca
       env = check.merge(env)
     end
 
@@ -110,9 +154,5 @@ class Notes
     end
 
   end
-  #end Web
-end
-#end Notes
 
-server = Notes::Web.new(Port: 6969, Host: 'localhost')
-server.own_app
+end
