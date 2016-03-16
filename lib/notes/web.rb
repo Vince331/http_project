@@ -19,7 +19,7 @@ class Notes
         env = parser(socket)
         response_code, headers, body = @app.call(env)
         header = "HTTP/1.1 "+response_code.to_s+" OK\r\n" +
-          headers.map{ |k,v| "#{k}: #{v}"}.join("\r\n")
+        headers.map{ |k,v| "#{k}: #{v}"}.join("\r\n")
         socket.print header
         socket.print "\r\n\r\n"
         socket.print body.join
@@ -81,11 +81,9 @@ class Notes
       else
         check["QUERY_STRING"] = ""
       end
-
       array = final.map do |x|
         x.chomp.split(": ",2)
       end
-
       i = 0
       env = {}
       while i < array.length
@@ -96,6 +94,9 @@ class Notes
         end
         i+=1
       end
+
+      require "pry"
+      binding.pry
       env = check.merge(env)
     end
 
@@ -117,4 +118,5 @@ class Notes
     end
 
   end
+
 end

@@ -3,7 +3,6 @@ require 'net/http'  # this is from the stdlib
 require 'stringio'
 
 class ParsingTest < Minitest::Test
-
   def test_it_parses_socket_input_in_a_predicatable_pattern
     socket = StringIO.new "GET / HTTP/1.1\r\n" +
       "Host: localhost:4300\r\n" +
@@ -15,12 +14,9 @@ class ParsingTest < Minitest::Test
       "Accept-Language: en-US,en;q=0.8\r\n" +
       "Cookie: gsScrollPos=\r\n" +
       "\r\n"
-
     env_hash = Notes::Web.parser(socket)
-    assert_equal 'GET' , env_hash["REQUEST_METHOD"]
-    assert_equal '/' , env_hash["PATH_INFO"]
-    assert_equal 'HTTP/1.1' , env_hash["HTTP_VERSION"]
-
+    assert_equal 'GET', env_hash["REQUEST_METHOD"]
+    assert_equal '/', env_hash["PATH_INFO"]
+    assert_equal 'HTTP/1.1', env_hash["HTTP_VERSION"]
   end
-
 end
