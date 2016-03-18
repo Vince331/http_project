@@ -5,7 +5,7 @@ class Notes
     formpath = File.realdirpath("views/root.html")
     notepath = File.realdirpath("views/notes.rb")
     FORM = File.read(formpath)
-    NOTES = File.read(notepath)
+    NOTES = eval File.read(notepath)
 
     attr_accessor :server
 
@@ -111,7 +111,7 @@ class Notes
     def own_app
       loop do
         socket = @server.accept
-        parser(socket)
+        Server.parser(socket)
         socket.print "HTTP/1.1 200 OK\r\n"
         socket.print "Content-Type: text/html\r\n"
         socket.print "Content-Length: #{@form.length}\r\n"
