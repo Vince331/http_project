@@ -112,12 +112,13 @@ class Notes
       loop do
         socket = @server.accept
         Server.parser(socket)
-        socket.print "HTTP/1.1 200 OK\r\n"
-        socket.print "Content-Type: text/html\r\n"
-        socket.print "Content-Length: #{@form.length}\r\n"
-        socket.print "\r\n"
-        socket.puts @form
-        socket.close
+        response_code = 200
+        body = [@form]
+        headers = {
+          "Content-Type" => "text/html",
+          "Content-Length" => @form.length,
+        }
+        Server.printer(socket, response_code, headers, body)
       end
     end
   end
