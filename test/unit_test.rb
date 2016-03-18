@@ -35,9 +35,4 @@ class ParsingTest < Minitest::Test
     assert_equal '/', env_hash["PATH_INFO"]
     assert_equal 'HTTP/1.1', env_hash["HTTP_VERSION"]
   end
-
-
-
-
-
 end

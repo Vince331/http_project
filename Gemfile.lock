@@ -1,5 +1,9 @@
 GEM
+<<<<<<< HEAD
   remote: http://rubygems.org/
+=======
+  remote: https://rubygems.org/
+>>>>>>> b4213ebd21647f74732d8bdf29603319f2c4fc06
   specs:
     ast (2.2.0)
     binding_of_caller (0.7.2)
