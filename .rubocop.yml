@@ -46,6 +46,8 @@ Style/AlignHash:
   EnforcedColonStyle: table
   EnforcedLastArgumentHashStyle: always_ignore
 
+Style/AlignArray:
+  Enabled: false
 Style/AlignParameters:
   EnforcedStyle: with_first_parameter
 

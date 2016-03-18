@@ -14,11 +14,10 @@ end
 
 desc 'rubocop test'
 task :rubocop do
-  sh "rubocop --fail-fast"
+  sh "rubocop"
 end
+
 desc 'rubocop runner'
-
 task :test2 do
-  sh "rubocop --fail-fast"
+  sh "rubocop"
 end
-

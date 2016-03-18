@@ -85,7 +85,6 @@ class Notes
     end
 
     def self.append(array)
-      i = 0
       env = {}
       array.each do |x|
         x[0] = "HTTP_#{x[0]}" unless x[0] == 'CONTENT_TYPE' || x[0] == 'CONTENT_LENGTH'
