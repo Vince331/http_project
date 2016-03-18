@@ -1,3 +1,3 @@
-require './lib/notes/web'
-server = Notes::Web.new(Port: 6969, Host: 'localhost')
+require './lib/notes/server'
+server = Notes::Server.new(Port: 6969, Host: 'localhost')
 server.own_app
