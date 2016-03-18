@@ -2,7 +2,6 @@ require 'socket'
 
 class Notes
   class Server
-
     FORM = "<form action='/search' method='GET'>
            <input type='text' name='query'>
            <input type='Submit'>
@@ -22,7 +21,7 @@ class Notes
 
     attr_accessor :server
 
-    def initialize(app = nil, hash)
+    def initialize(hash, app = nil)
       @server = TCPServer.new hash[:Host], hash[:Port]
       @app =  app
       @form = FORM
@@ -38,8 +37,11 @@ class Notes
         socket = @server.accept
         env = Server.parser(socket)
         response_code, headers, body = @app.call(env)
-        header = "HTTP/1.1 "+response_code.to_s+" OK\r\n" +
-          headers.map{ |k,v| "#{k}: #{v}"}.join("\r\n")
+
+        require "pry"
+        binding.pry
+        header = "HTTP/1.1 " + response_code.to_s + " OK\r\n" +
+           headers.map { |k, v| "#{k}: #{v}" }.join("\r\n")
         socket.print header
         socket.print "\r\n\r\n"
         socket.print body.join
@@ -60,16 +62,16 @@ class Notes
     def self.request_line(final)
       first_line = final.shift
       first_line = first_line.split(" ")
-      check = {"REQUEST_METHOD" => first_line[0],
-               "PATH_INFO" => first_line[1],
-               "SERVER_PROTOCOL"=> first_line[2],
-               "HTTP_VERSION"=> first_line[2]}
+      check = {  "REQUEST_METHOD" => first_line[0],
+                 "PATH_INFO"      => first_line[1],
+                 "SERVER_PROTOCOL"=> first_line[2],
+                 "HTTP_VERSION"   => first_line[2] }
+      check
     end
 
     def self.query_string(check)
-      query = []
       if check["PATH_INFO"].include?("?")
-        query  = check["PATH_INFO"][/=.*/][1..-1].split("+")
+        query = check["PATH_INFO"][/=.*/][1..-1].split("+")
         check["QUERY_STRING"] = query
       else
         check["QUERY_STRING"] = ""
@@ -77,18 +79,15 @@ class Notes
       check["QUERY_STRING"]
     end
 
-
     def self.notes_check(query_string)
       if query_string.length > 0
         result = NOTES
         query_string.select do |elem|
           result = result.select do |x|
-
             x.upcase.include? elem.upcase
           end
         end
-
-        @form  = result.join("<br>")
+        @form = result.join("<br>")
       else
         @form = FORM
       end
@@ -96,17 +95,18 @@ class Notes
 
     def self.to_hash(final)
       array = final.map do |x|
-        x.chomp.split(": ",2)
+        x.chomp.split(": ", 2)
       end
       i = 0
       env = {}
       while i < array.length
-        if array[i][0] == nil
+        if array[i][0].nil?
         else
-          array[i][0]  = "HTTP_#{array[i][0]}" unless array[i][0]  == 'CONTENT_TYPE' || array[i][0] == 'CONTENT_LENGTH'
+          array[i][0] = "HTTP_#{array[i][0]}" unless array[i][0] \
+            == 'CONTENT_TYPE' || array[i][0] == 'CONTENT_LENGTH'
           env[(array[i][0]).upcase.tr("-", "_")] = array[i][1]
         end
-        i+=1
+        i += 1
       end
       env
     end

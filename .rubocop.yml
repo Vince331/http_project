@@ -4,6 +4,7 @@
 AllCops:
   Exclude:
     - 'tmp/**/*'
+    - 'vendor/**/*'
   DefaultFormatter: progress
   DisplayCopNames: true
   DisplayStyleGuide: true

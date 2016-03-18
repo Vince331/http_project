@@ -7,7 +7,7 @@ class ServerTest < Minitest::Test
   end
 
   def run_server(port, app, &block)
-    server = Notes::Server.new(app, Port: port, Host: 'localhost')
+    server = Notes::Server.new({Port: port, Host: 'localhost'}, app)
     # The thread allows the server to sit and wait for a request,
     # but still return to here so we can send it.
     thread = Thread.new do
