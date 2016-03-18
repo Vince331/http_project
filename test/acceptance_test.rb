@@ -48,6 +48,7 @@ class ServerTest < Minitest::Test
   end
 
   def test_it_handles_multiple_requests
+
     app = Proc.new { |env_hash| [200, {'Content-Type' => 'text/plain'}, []] }
     run_server port, app do
       assert_equal "200", Net::HTTP.get_response('localhost', '/', port).code
@@ -56,6 +57,7 @@ class ServerTest < Minitest::Test
   end
 
   def test_it_starts_on_the_specified_port
+
     other_port = 9293
     app = Proc.new do |env_hash|
       [ 200,

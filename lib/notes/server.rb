@@ -37,13 +37,10 @@ class Notes
         socket = @server.accept
         env = Server.parser(socket)
         response_code, headers, body = @app.call(env)
-
-        require "pry"
-        binding.pry
         header = "HTTP/1.1 " + response_code.to_s + " OK\r\n" +
-           headers.map { |k, v| "#{k}: #{v}" }.join("\r\n")
+          headers.map { |k, v| "#{k}: #{v}\r\n" }.join
         socket.print header
-        socket.print "\r\n\r\n"
+        socket.print "\r\n"
         socket.print body.join
         socket.close
       end
@@ -97,16 +94,16 @@ class Notes
       array = final.map do |x|
         x.chomp.split(": ", 2)
       end
+      # a method to append neccesary to make the http request work
+      append(array)
+    end
+
+    def self.append(array)
       i = 0
       env = {}
-      while i < array.length
-        if array[i][0].nil?
-        else
-          array[i][0] = "HTTP_#{array[i][0]}" unless array[i][0] \
-            == 'CONTENT_TYPE' || array[i][0] == 'CONTENT_LENGTH'
-          env[(array[i][0]).upcase.tr("-", "_")] = array[i][1]
-        end
-        i += 1
+      array.each do |x|
+        x[0] = "HTTP_#{x[0]}" unless x[0] == 'CONTENT_TYPE' || x[0] == 'CONTENT_LENGTH'
+        env[x[0].upcase.tr("-", "_")] = x[1] unless x[0].nil?
       end
       env
     end
@@ -118,7 +115,7 @@ class Notes
       check = request_line(final)
       # if a search has occured it returns an array of the query
       check["QUERY_STRING"] = query_string(check)
-      # using that query arry it returns notes that match the query
+      # using that query array it returns notes that match the query
       notes_check(check["QUERY_STRING"])
       # turns the request into a hash that the server can respond with
       env = to_hash(final)

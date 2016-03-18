@@ -1,22 +1,13 @@
 GEM
   remote: http://rubygems.org/
-<<<<<<< HEAD
-  remote: https://github.com/bbatsov/rubocop/
-=======
->>>>>>> 9fef91b3d7ce72c641ac7563c4245ce3fd0761ca
   specs:
     ast (2.2.0)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
-<<<<<<< HEAD
-    debug_inspector (0.0.2)
-    interception (0.5)
-=======
     coderay (1.1.0)
     debug_inspector (0.0.2)
     interception (0.5)
     method_source (0.8.2)
->>>>>>> 9fef91b3d7ce72c641ac7563c4245ce3fd0761ca
     minitest (5.8.4)
     mrspec (0.3.1)
       minitest (~> 5.0)
@@ -25,16 +16,12 @@ GEM
     parser (2.3.0.6)
       ast (~> 2.2)
     powerpack (0.1.1)
-<<<<<<< HEAD
-    rainbow (2.1.0)
-=======
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
     rainbow (2.1.0)
     rake (10.4.2)
->>>>>>> 9fef91b3d7ce72c641ac7563c4245ce3fd0761ca
     rouge (1.10.1)
     rspec-core (3.4.4)
       rspec-support (~> 3.4.0)
@@ -46,10 +33,7 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.7.5)
-<<<<<<< HEAD
-=======
     slop (3.6.0)
->>>>>>> 9fef91b3d7ce72c641ac7563c4245ce3fd0761ca
     unicode-display_width (1.0.2)
     what_weve_got_here_is_an_error_to_communicate (0.0.8)
       binding_of_caller (~> 0.7.2)
@@ -61,13 +45,9 @@ PLATFORMS
 
 DEPENDENCIES
   mrspec (= 0.3.1)
-<<<<<<< HEAD
-  rubocop (= 0.38.0)
-=======
   pry
   rake
-  rubocop
->>>>>>> 9fef91b3d7ce72c641ac7563c4245ce3fd0761ca
+  rubocop (= 0.38.0)
 
 BUNDLED WITH
    1.11.2
