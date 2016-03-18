@@ -2,11 +2,9 @@ require 'socket'
 
 class Notes
   class Web
+    file_path = File.realdirpath('views/root.html')
+   FORM = File.read(file_path)
 
-   FORM = "<form action='/search' method='GET'>
-           <input type='text' name='query'>
-           <input type='Submit'>
-           </form>"
     NOTES = ['Add 1 to 2    1 + 2  # => 3',
             'Subtract 5 from 2    2 - 5  # => -3',
             'Is 1 less than 2    1 < 2  # => true',
@@ -27,6 +25,7 @@ class Notes
       @app =  app
       @form = FORM
       @notes = NOTES
+
     end
 
     def stop
