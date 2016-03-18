@@ -35,8 +35,6 @@ class Notes
         socket.print header
         socket.print "\r\n\r\n"
         socket.print body
-        require "pry"
-        binding.pry
         socket.close
       end
     end
