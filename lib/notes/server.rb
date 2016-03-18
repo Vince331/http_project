@@ -2,22 +2,10 @@ require 'socket'
 
 class Notes
   class Server
-    FORM = "<form action='/search' method='GET'>
-           <input type='text' name='query'>
-           <input type='Submit'>
-           </form>"
-    NOTES = ['Add 1 to 2    1 + 2  # => 3',
-             'Subtract 5 from 2    2 - 5  # => -3',
-             'Is 1 less than 2    1 < 2  # => true',
-             'Is 1 equal to 2    1 == 2 # => 3',
-             'Is 1 greater than 2    1 > 2  # => 3',
-             'Is 1 less than or equal to 2    1 <= 2 # => 3',
-             'Is 1 greater than or equal to 2    1 >= 2 # => 3',
-             'Convert 1 to a float        1.to_f # => 3',
-             'Concatenate two arrays    [1,2] + [2, 3]   # => [1, 2, 2, 3]',
-             'Remove elements in second array from first    [1,2,4] - [2, 3] # => [1,4]',
-             'Access an element in an array by its index    ["a","b","c"][0] # => "a"',
-             'Find out how big the array is    ["a","b"].length # => 2']
+    formpath = File.realdirpath("views/root.html")
+    notepath = File.realdirpath("views/notes.rb")
+    FORM = File.read(formpath)
+    NOTES = File.read(notepath)
 
     attr_accessor :server
 
@@ -37,35 +25,30 @@ class Notes
         socket = @server.accept
         env = Server.parser(socket)
         response_code, headers, body = @app.call(env)
-
-        require "pry"
-        binding.pry
-        header = "HTTP/1.1 " + response_code.to_s + " OK\r\n" +
-           headers.map { |k, v| "#{k}: #{v}" }.join("\r\n")
-        socket.print header
-        socket.print "\r\n\r\n"
-        socket.print body.join
-        socket.close
+        Notes::Server.printer(socket, response_code, headers, body)
       end
     end
 
+    def self.printer(socket, response_code, headers, body)
+      socket.print "HTTP/1.1 " + response_code.to_s + "\r\n"
+      socket.print headers.map { |k, v| "#{k}: #{v}" }.join("\r\n") + "\r\n\r\n"
+      socket.print body.join
+      socket.close
+    end
 
     def self.get_request(socket)
       final = []
       final << socket.gets
-      while final[-1] != "\r\n"
-        final << socket.gets
-      end
+      final << socket.gets while final[-1] != "\r\n"
       final
     end
 
     def self.request_line(final)
       first_line = final.shift
       first_line = first_line.split(" ")
-      check = {  "REQUEST_METHOD" => first_line[0],
-                 "PATH_INFO"      => first_line[1],
-                 "SERVER_PROTOCOL"=> first_line[2],
-                 "HTTP_VERSION"   => first_line[2] }
+      check = {  "REQUEST_METHOD" => first_line[0], "PATH_INFO" => first_line[1],
+                 "SERVER_PROTOCOL" => first_line[2], "HTTP_VERSION" => first_line[2]
+              }
       check
     end
 
@@ -80,7 +63,7 @@ class Notes
     end
 
     def self.notes_check(query_string)
-      if query_string.length > 0
+      if !query_string.empty?
         result = NOTES
         query_string.select do |elem|
           result = result.select do |x|
