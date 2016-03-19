@@ -1,4 +1,6 @@
-#!/usr/bin/env
+#!/usr/bin/env ruby
 require './lib/notes/server'
-server = Notes::Server.new(Port: 6969, Host: 'localhost')
-server.own_app
+server = Notes::Server.new({Port: 6969, Host: 'localhost'},
+                         Notes::APP
+                          )
+server.start

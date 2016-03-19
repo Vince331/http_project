@@ -2,18 +2,12 @@ require 'socket'
 
 class Notes
   class Server
-    formpath = File.realdirpath("views/root.html")
-    notepath = File.realdirpath("views/notes.rb")
-    FORM = File.read(formpath)
-    NOTES = eval File.read(notepath)
 
     attr_accessor :server
 
     def initialize(hash, app = nil)
       @server = TCPServer.new hash[:Host], hash[:Port]
       @app =  app
-      @form = FORM
-      @notes = NOTES
     end
 
     def stop
@@ -62,20 +56,6 @@ class Notes
       check["QUERY_STRING"]
     end
 
-    def self.notes_check(query_string)
-      if !query_string.empty?
-        result = NOTES
-        query_string.select do |elem|
-          result = result.select do |x|
-            x.upcase.include? elem.upcase
-          end
-        end
-        result.join("<br>")
-      else
-       FORM
-      end
-    end
-
     def self.to_hash(final)
       array = final.map do |x|
         x.chomp.split(": ", 2)
@@ -100,31 +80,40 @@ class Notes
       check = request_line(final)
       # if a search has occured it returns an array of the query
       check["QUERY_STRING"] = query_string(check)
-      # using that query array it returns notes that match the query
-      @form = notes_check(check["QUERY_STRING"])
       # turns the request into a hash that the server can respond with
       env = to_hash(final)
       # returns the full hash of the request that the server can respond with
       check.merge(env)
     end
 
-    def own_app
-      loop do
-        socket = @server.accept
-        parser(socket)
-        socket.print "HTTP/1.1 200 OK\r\n"
-        socket.print "Content-Type: text/html\r\n"
-        socket.print "Content-Length: #{@form.length}\r\n"
-        socket.print "\r\n"
-        socket.puts @form
-        socket.close
-      end
-    end
-    # app = Proc.new do |env|
-    #   hash =  Server.parser(env)
-    #   # hash["PATH_INFO"]
-    #   form = @form
-    #   [ 200, { 'Content-Type' => 'text/html', 'Content-Length' => form.length.to_s }, form.lines ]
-    # end
+
   end
+    formpath = File.realdirpath("views/root.html")
+    FORM = File.read(formpath)
+    notepath = File.realdirpath("views/notes.rb")
+    NOTES = eval File.read(notepath)
+  APP = Proc.new do |env|
+      form = FORM
+      # using that query array it returns notes that match the query
+      query_string = env["QUERY_STRING"]
+      if !query_string.empty?
+        result = NOTES
+        query_string.select do |elem|
+          result = result.select do |x|
+            x.upcase.include? elem.upcase
+          end
+        end
+        form = result.join("<br>")
+      else
+        form = FORM
+      end
+      response_code = 200
+      headers = {
+        "Content-Type" => "text/html",
+        "Content-Length" => form.length,
+      }
+      body = [form]
+      [response_code, headers, body]
+    end
+
 end
