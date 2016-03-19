@@ -5,7 +5,7 @@ class Notes
     formpath = File.realdirpath("views/root.html")
     notepath = File.realdirpath("views/notes.rb")
     FORM = File.read(formpath)
-    NOTES = File.read(notepath)
+    NOTES = eval File.read(notepath)
 
     attr_accessor :server
 
@@ -70,9 +70,9 @@ class Notes
             x.upcase.include? elem.upcase
           end
         end
-        @form = result.join("<br>")
+        result.join("<br>")
       else
-        @form = FORM
+       FORM
       end
     end
 
@@ -101,7 +101,7 @@ class Notes
       # if a search has occured it returns an array of the query
       check["QUERY_STRING"] = query_string(check)
       # using that query array it returns notes that match the query
-      notes_check(check["QUERY_STRING"])
+      @form = notes_check(check["QUERY_STRING"])
       # turns the request into a hash that the server can respond with
       env = to_hash(final)
       # returns the full hash of the request that the server can respond with
@@ -120,5 +120,11 @@ class Notes
         socket.close
       end
     end
+    # app = Proc.new do |env|
+    #   hash =  Server.parser(env)
+    #   # hash["PATH_INFO"]
+    #   form = @form
+    #   [ 200, { 'Content-Type' => 'text/html', 'Content-Length' => form.length.to_s }, form.lines ]
+    # end
   end
 end

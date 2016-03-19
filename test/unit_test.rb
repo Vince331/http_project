@@ -2,7 +2,7 @@ require 'notes/server' # <-- you'll need to make this
 require 'net/http' # this is from the stdlib
 
 class ParsingTest < Minitest::Test
-  def test_it_parses_socket_input_in_a_predicatable_pattern
+  def test_it_returns_the_path_info_correctly
     socket = StringIO.new ["GET /search&query=add+1 HTTP/1.1\r\n",
       "Host: localhost:4300\r\n",
       "Connection: keep-alive\r\n",
@@ -19,7 +19,7 @@ class ParsingTest < Minitest::Test
     assert_equal 'HTTP/1.1', env_hash["HTTP_VERSION"]
   end
 
-  def test_2it_parses_socket_input_in_a_predicatable_pattern
+  def test_it_returns_the_path_ifo_with_the_search_correct
     socket = StringIO.new ["GET / HTTP/1.1\r\n",
       "Host: localhost:4300\r\n", "Connection: keep-alive\r\n",
       "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\r\n",
