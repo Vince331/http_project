@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
-require './lib/notes/server'
+lib_dir = File.realdirpath('../lib' ,__dir__)
+$LOAD_PATH.unshift(lib_dir)
+require 'notes/server'
 server = Notes::Server.new({Port: 6969, Host: 'localhost'}, Notes::APP)
 server.start
