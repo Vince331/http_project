@@ -17,7 +17,7 @@ class Notes
     def start
       loop do
         socket = @server.accept
-        env = Server.parser(socket)
+        env = Parser.new(socket).call
         response_code, headers, body = @app.call(env)
         Notes::Server.printer(socket, response_code, headers, body)
       end
@@ -29,35 +29,5 @@ class Notes
       socket.print body.join
       socket.close
     end
-
-    def self.parser(socket)
-      Parser.new(socket).call
-    end
-  end
-  formpath = File.realdirpath("views/root.html")
-  FORM = File.read(formpath)
-  notepath = File.realdirpath("views/notes.rb")
-  NOTES = eval File.read(notepath)
-  APP = Proc.new do |env|
-    form = FORM
-    # using that query array it returns notes that match the query
-    query_string = env["QUERY_STRING"]
-    if !query_string.empty?
-      result = NOTES
-      query_string.select do |elem|
-        result = result.select do |x|
-          x.upcase.include? elem.upcase
-        end
-      end
-      form = result.join("<br>")
-    else
-      form = FORM
-    end
-    response_code = 200
-    headers = {
-      "Content-Type" => "text/html", "Content-Length" => form.length
-    }
-    body = [form]
-    [response_code, headers, body]
   end
 end

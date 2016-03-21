@@ -231,3 +231,9 @@ Performance/RedundantBlockCall:
 
 Style/SpaceAroundEqualsInParameterDefault:
   Enabled: false
+
+Lint/Eval:
+  Enabled: false
+
+Lint/AmbiguousRegexpLiteral:
+  Enabled: false
