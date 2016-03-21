@@ -9,11 +9,11 @@ class WebAppTest < Minitest::Test
     assert_match /form/, body.join
   end
 
-  def test_if_you_tye
+  def test_if_you_type_a_search_it_returns_what_you_searched_for
     env = {'PATH_INFO' => '/', 'QUERY_STRING' => ["length"]}
     response_code, headers, body = Notes::APP.call(env)
     assert_equal 200, response_code
     assert_equal 'text/html', headers['Content-Type']
-    assert_equal "Find out how big the array is    \[\"a\",\"b\"\].length \# \=> 2", body.join
+    assert_match "Find out how big the array is    \[\"a\",\"b\"\].length \# \=> 2", body.join
   end
 end

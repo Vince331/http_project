@@ -1,13 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>form</title>
+<style>
+body  {
+    background-image: url("http://reduct.bagwanpankaj.com/assets/img/post_it.jpg");
+    background-color: #cccccc;
+}
+
+.formtext {
+  margin: auto;
+  width: 60%;
+  padding: 10px;
+  margin-left: 500px;
+  margin-right: 350px;
+}
+
+</style>
+  <title>SearchYourNotes</title>
+    <link rel="stylesheet" type="text/css" href="~/public/stylesheets/notes.css">
 </head>
 <body>
-<img src="http://reduct.bagwanpankaj.com/assets/img/post_it.jpg">
+ <div class="formtext">
+ <h2> Search your notes here! </h2>
+ <p>(submit empty form to get all notes)</p>
  <form action='/search' method='GET'>
            <input type='text' name='query'>
            <p><input type='Submit'></p>
            </form>
+  </div>
 </body>
 </html>
